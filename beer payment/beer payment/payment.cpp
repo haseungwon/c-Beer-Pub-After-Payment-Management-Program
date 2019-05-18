@@ -15,6 +15,7 @@ protected:
 	fstream f;
 	int volume;
 	char name[25];
+	int cnt = 0;
 
 public:
 	void openfile_to_write()
@@ -23,6 +24,15 @@ public:
 		if (!f)
 		{
 			cout << "Input file opening failed";
+			exit(1);
+		}
+	}
+	void openfile_to_read()
+	{
+		f.open("save_Data.txt", ios::in);
+		if (!f)
+		{
+			cout << "File does not open!!";
 			exit(1);
 		}
 	}
@@ -41,9 +51,15 @@ public:
 		cout << "Volume: ";
 		cin >> volume;
 		f << name << " " << volume << " ";
+		cnt++;
 	}
 	void time_limit()
 	{
+		int hr1, min1, sec1;
+		int hr2, min2, sec2;
+		openfile_to_read();
+
+
 
 	}
 
