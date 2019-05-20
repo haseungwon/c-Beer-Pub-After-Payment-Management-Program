@@ -36,12 +36,31 @@ public:
 			exit(1);
 		}
 	}
+	void time_limit(tm *now)
+	{
+		int hr1, min1, sec1;
+		int tmp;
+		f >> hr1 >> min1 >> sec1;
+		tmp = now->tm_sec - sec1;
+		sec1 = tmp < 0 ? (tmp + 60) &&(now->tm_min=now->tm_min-1): tmp;
+		tmp = now->tm_min - min1;
+		min1 = tmp < 0 ? (tmp + 60) && (now->tm_hour = now->tm_hour - 1) : tmp;
+		hr1 = now->tm_hour - hr1;
+		if (hr1 >= 2)
+		{
+			printf("Time is Over!!");
+		}
+
+	}
 	void record_time()
 	{
+		
 		time_now = time(NULL);
 		Time = localtime(&time_now);
 		f << Time->tm_hour << " " << Time->tm_min << " " << Time->tm_sec << '\n';
+		time_limit(Time);
 		cout << Time->tm_hour << " " << Time->tm_min << " " << Time->tm_sec << '\n';
+
 		f.close();
 	}
 	void record_beer()
@@ -53,15 +72,7 @@ public:
 		f << name << " " << volume << " ";
 		cnt++;
 	}
-	void time_limit()
-	{
-		int hr1, min1, sec1;
-		int hr2, min2, sec2;
-		openfile_to_read();
-
-
-
-	}
+	
 
 };
 
@@ -76,10 +87,7 @@ int main()
 	int volume;
 	ifstream f("save_Data.txt");
 	f >> name >> volume >> a >> b >> q;
-
 	cout << name << volume << a << b << q << endl;
-
-
 	return 0;
 }
 class Cashier :protected Customer
