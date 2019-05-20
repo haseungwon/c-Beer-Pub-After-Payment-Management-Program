@@ -1,0 +1,14 @@
+Asahi 8.4
+Cass 8
+Dunkel 9.1
+Edelweiss 8.8
+Heineken 9.1
+Herrnbrau 9
+Hoegarrden 8.8
+Magners 8.8
+Red 8.7
+Smithwick's 8.8
+Stella 9
+Tetley's 9
+Tsingtao 8.9
+Weizen 9.1
