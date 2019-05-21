@@ -15,9 +15,11 @@ protected:
 	fstream f;
 	int volume;
 	char name[25];
-	int cnt = 0;
+	
 
 public:
+	int cnt = 0;
+
 	void openfile_to_write()
 	{
 		f.open("save_Data.txt", ios::app);
@@ -73,13 +75,59 @@ public:
 		cnt++;
 	}
 	
-
+	friend void send_data(Customer, Cashier);
 };
+
+class Cashier :private Customer
+{
+private:
+	typedef struct cost_beer
+	{
+		char name[16];
+		float won_per_cc;
+
+	}Cost_beer;
+
+	Cost_beer cost_list[14];
+public:
+	void open_cost_list()
+	{
+		char name[16];
+		float c;
+		int i;
+		f.open("cost_list.txt",ios::in);
+		for ( i=0;i < 14;i++)
+		{
+			f >> name >> c;
+			strcpy(cost_list[i].name, name);
+			cost_list[i].won_per_cc = c;
+		}
+		f.close();
+	}
+	void get_data(Customer x)
+	{
+		f.open("save_Data.txt");
+
+
+
+	}
+	void show_data()
+	{
+
+	}
+	void show_payment();
+	friend void send_data(Customer, Cashier);
+};
+void send_data(Customer x, Cashier y)
+{
+	y.cnt = x.cnt;
+}
 
 int main()
 {
 	Customer c;
-	c.openfile_to_write();
+	Cashier ch;
+/*	c.openfile_to_write();
 	c.record_beer();
 	c.record_time();
 	int a, b, q;
@@ -87,13 +135,8 @@ int main()
 	int volume;
 	ifstream f("save_Data.txt");
 	f >> name >> volume >> a >> b >> q;
-	cout << name << volume << a << b << q << endl;
+	cout << name << volume << a << b << q << endl;*/
+	ch.open_cost_list();
+	
 	return 0;
 }
-class Cashier :protected Customer
-{
-public:
-	void get_data(Customer, Cashier);
-	void show_data();
-	void show_payment();
-};
