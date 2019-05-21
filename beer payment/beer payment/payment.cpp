@@ -2,6 +2,7 @@
 #include <iostream>
 #include <ctime>
 #include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -75,7 +76,6 @@ public:
 		cnt++;
 	}
 	
-	friend void send_data(Customer, Cashier);
 };
 
 class Cashier :private Customer
@@ -85,10 +85,11 @@ private:
 	{
 		char name[16];
 		float won_per_cc;
-
 	}Cost_beer;
 
 	Cost_beer cost_list[14];
+
+
 public:
 	void open_cost_list()
 	{
@@ -96,6 +97,11 @@ public:
 		float c;
 		int i;
 		f.open("cost_list.txt",ios::in);
+		if (!f)
+		{
+			cout << "Input file opening failed";
+			exit(1);
+		}
 		for ( i=0;i < 14;i++)
 		{
 			f >> name >> c;
@@ -104,24 +110,24 @@ public:
 		}
 		f.close();
 	}
-	void get_data(Customer x)
-	{
-		f.open("save_Data.txt");
 
-
-
-	}
 	void show_data()
 	{
+		string line;
+		openfile_to_read();
+		while (!f.eof())
+		{
+			getline(f, line);
+			cout << line << endl;
+		}
+	}
+	void show_payment()
+	{
 
 	}
-	void show_payment();
-	friend void send_data(Customer, Cashier);
+
 };
-void send_data(Customer x, Cashier y)
-{
-	y.cnt = x.cnt;
-}
+
 
 int main()
 {
@@ -137,6 +143,7 @@ int main()
 	f >> name >> volume >> a >> b >> q;
 	cout << name << volume << a << b << q << endl;*/
 	ch.open_cost_list();
+	ch.show_data();
 	
 	return 0;
 }
