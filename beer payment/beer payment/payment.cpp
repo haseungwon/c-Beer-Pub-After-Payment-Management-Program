@@ -89,6 +89,40 @@ private:
 
 	Cost_beer cost_list[14];
 
+	int total_cost = 0;
+
+	void calculate_payment()
+	{
+		int i;
+		int j;
+
+		int cost;
+		string tmp;
+		for (i = 0;i < cnt;i++)
+		{
+			openfile_to_read();
+
+			f >> name >> volume;
+			getline(f, tmp);
+			f.close();
+			for (j = 0;j < 14;j++)
+			{
+				if (strcmp(cost_list[j].name, name) == 0)
+				{
+					cost = cost_list[j].won_per_cc*volume;
+					f.open("final_bill.txt", ios::in);
+					if (!f)
+					{
+						cout << "Input file opening failed";
+						exit(1);
+					}
+					f << name << cost;
+					f.close();
+					total_cost += cost;
+				}
+			}
+		}
+	}
 
 public:
 	void open_cost_list()
@@ -96,7 +130,7 @@ public:
 		char name[16];
 		float c;
 		int i;
-		f.open("cost_list.txt",ios::in);
+		f.open("cost_list.txt",ios::app);
 		if (!f)
 		{
 			cout << "Input file opening failed";
@@ -124,7 +158,20 @@ public:
 	}
 	void show_payment()
 	{
-
+		calculate_payment();
+		f.open("final_bill.txt", ios::app);
+		{
+			cout << "Input file opening failed";
+			exit(1);
+		}
+		while (!f.eof())
+		{
+			char name[16];
+			int cost;
+			f >> name >> cost;
+			cout << name<<": " << cost << endl;
+		}
+		cout << "Total Sum: " << total_cost << endl;
 	}
 
 };
@@ -145,6 +192,5 @@ int main()
 	cout << name << volume << a << b << q << endl;*/
 	ch.open_cost_list();
 	ch.show_data();
-	k
-	return 0;;
+	return 0;
 }
