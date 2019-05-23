@@ -119,6 +119,7 @@ public:
 		{
 			getline(f, line);
 			cout << line << endl;
+			cnt++;
 		}
 	}
 	void show_payment()
@@ -144,6 +145,6 @@ int main()
 	cout << name << volume << a << b << q << endl;*/
 	ch.open_cost_list();
 	ch.show_data();
-	
-	return 0;
+	k
+	return 0;;
 }
