@@ -181,7 +181,7 @@ int main()
 {
 	Customer c;
 	Cashier ch;
-/*	c.openfile_to_write();
+	c.openfile_to_write();
 	c.record_beer();
 	c.record_time();
 	int a, b, q;
@@ -189,7 +189,7 @@ int main()
 	int volume;
 	ifstream f("save_Data.txt");
 	f >> name >> volume >> a >> b >> q;
-	cout << name << volume << a << b << q << endl;*/
+	cout << name << volume << a << b << q << endl;
 	ch.open_cost_list();
 	ch.show_data();
 	return 0;
