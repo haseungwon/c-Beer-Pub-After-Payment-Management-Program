@@ -181,7 +181,7 @@ int main()
 {
 	Customer c;
 	Cashier ch;
-	c.openfile_to_write();
+/*	c.openfile_to_write();
 	c.record_beer();
 	c.record_time();
 	int a, b, q;
