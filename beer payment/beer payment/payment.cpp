@@ -5,7 +5,7 @@
 #include <string>
 
 using namespace std;
-
+int cnt = 0;
 class Customer
 {
 private:
@@ -19,10 +19,6 @@ protected:
 
 
 public:
-	int cnt;
-	Customer() {
-		cnt = 0;
-	}
 
 	void openfile_to_write()
 	{
@@ -47,7 +43,7 @@ public:
 		int hr1, min1, sec1;
 		int tmp;
 		char tmpname[16];
-		f >> tmpname>>tmp>>hr1 >> min1 >> sec1;
+		f >> tmpname >> tmp >> hr1 >> min1 >> sec1;
 		cout << hr1 << endl;
 		tmp = now->tm_sec - sec1;
 		sec1 = tmp < 0 ? (tmp + 60) && (now->tm_min = now->tm_min - 1) : tmp;
@@ -101,21 +97,19 @@ private:
 	{
 		int i;
 		int j;
-
 		int cost;
 		string tmp;
-		for (i = 0; i < cnt; i++)
+		for (i = 0; i < cnt; i++) //cnt가 원래 0으로 넘어왔는데 전역변수로 선언해서 실행 
 		{
-			openfile_to_read();
 			f >> name >> volume;
 			getline(f, tmp);
 			f.close();
 			for (j = 0; j < 14; j++)
 			{
-				if (strcmp(cost_list[j].name, name) == 0)
+				if (strcmp(cost_list[j].name, name) == 0) //cost_list에 name이 이상한문자로 되어있음
 				{
 					cost = cost_list[j].won_per_cc*volume;
-					f.open("final_bill.txt", ios::in);
+					f.open("final_bill.txt", ios::out); //final_bill에 저장해줄수 있게 오픈 방식 바꿈
 					if (!f)
 					{
 						cout << "Input file opening failed";
@@ -141,7 +135,7 @@ public:
 		f.open("cost_list.txt", ios::app);
 		if (!f)
 		{
-			cout << "Input file opening failed";
+			cout << "Input file opening failed"; //이 파일 안열려서 실행됨
 			exit(1);
 		}
 		for (i = 0; i < 14; i++)
@@ -167,8 +161,8 @@ public:
 	void show_payment()
 	{
 		calculate_payment();
-		f.open("final_bill.txt", ios::app);
-		{
+		f.open("final_bill.txt", ios::in); //final_bill에서 정보 가져올수 있게 오픈방식 바꿈
+		if (f.eof()) {
 			cout << "Input file opening failed";
 			exit(1);
 		}
@@ -198,7 +192,6 @@ int main()
 	ifstream f("save_Data.txt");
 	f >> name >> volume >> a >> b >> q;
 	cout << name << volume << a << b << q << endl;
-	
 	ch.show_payment();
 	ch.open_cost_list();
 	ch.show_data();
