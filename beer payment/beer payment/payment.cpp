@@ -99,17 +99,18 @@ private:
 		int j;
 		int cost;
 		string tmp;
-		for (i = 0; i < cnt; i++) //cnt가 원래 0으로 넘어왔는데 전역변수로 선언해서 실행 
+		for (i = 0; i < cnt; i++)
 		{
+			f.open("save_Data.txt", ios::in);
 			f >> name >> volume;
 			getline(f, tmp);
 			f.close();
 			for (j = 0; j < 14; j++)
 			{
-				if (strcmp(cost_list[j].name, name) == 0) //cost_list에 name이 이상한문자로 되어있음
+				if (strcmp(cost_list[j].name, name) == 0) //cost_list에 name이 이상한문자로 되어있음 이것만 해결하면 돌아갈것같음
 				{
 					cost = cost_list[j].won_per_cc*volume;
-					f.open("final_bill.txt", ios::out); //final_bill에 저장해줄수 있게 오픈 방식 바꿈
+					f.open("final_bill.txt", ios::out);
 					if (!f)
 					{
 						cout << "Input file opening failed";
@@ -135,7 +136,7 @@ public:
 		f.open("cost_list.txt", ios::app);
 		if (!f)
 		{
-			cout << "Input file opening failed"; //이 파일 안열려서 실행됨
+			cout << "Input file opening failed"; //이 파일 안열려서 마지막에 실행됨
 			exit(1);
 		}
 		for (i = 0; i < 14; i++)
@@ -161,7 +162,7 @@ public:
 	void show_payment()
 	{
 		calculate_payment();
-		f.open("final_bill.txt", ios::in); //final_bill에서 정보 가져올수 있게 오픈방식 바꿈
+		f.open("final_bill.txt", ios::in);
 		if (f.eof()) {
 			cout << "Input file opening failed";
 			exit(1);
