@@ -46,12 +46,15 @@ public:
 	{
 		int hr1, min1, sec1;
 		int tmp;
-		f >> hr1 >> min1 >> sec1;
+		char tmpname[16];
+		f >> tmpname>>tmp>>hr1 >> min1 >> sec1;
+		cout << hr1 << endl;
 		tmp = now->tm_sec - sec1;
 		sec1 = tmp < 0 ? (tmp + 60) && (now->tm_min = now->tm_min - 1) : tmp;
 		tmp = now->tm_min - min1;
 		min1 = tmp < 0 ? (tmp + 60) && (now->tm_hour = now->tm_hour - 1) : tmp;
 		hr1 = now->tm_hour - hr1;
+		cout << hr1 << endl;
 		if (hr1 >= 2)
 		{
 			printf("Time is Over!!");
@@ -60,13 +63,13 @@ public:
 	}
 	void record_time()
 	{
-
 		time_now = time(NULL);
 		Time = localtime(&time_now);
 		f << Time->tm_hour << " " << Time->tm_min << " " << Time->tm_sec << '\n';
-		time_limit(Time);
 		cout << Time->tm_hour << " " << Time->tm_min << " " << Time->tm_sec << '\n';
-
+		f.close();
+		openfile_to_read();
+		time_limit(Time);
 		f.close();
 	}
 	void record_beer()
@@ -127,7 +130,7 @@ private:
 	}
 
 public:
-	Cashier::Cashier() {
+	Cashier() {
 		total_cost = 0;
 	}
 	void open_cost_list()
@@ -195,6 +198,7 @@ int main()
 	ifstream f("save_Data.txt");
 	f >> name >> volume >> a >> b >> q;
 	cout << name << volume << a << b << q << endl;
+	
 	ch.show_payment();
 	ch.open_cost_list();
 	ch.show_data();
