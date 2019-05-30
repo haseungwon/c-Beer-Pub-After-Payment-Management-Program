@@ -19,4 +19,15 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="cost_list.txt">
+      <Filter>리소스 파일</Filter>
+    </Text>
+    <Text Include="final_bill.txt">
+      <Filter>리소스 파일</Filter>
+    </Text>
+    <Text Include="save_Data.txt">
+      <Filter>리소스 파일</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

@@ -6,8 +6,16 @@
 
 using namespace std;
 
-void fopen(fstream &f, String dir, char mode){
-	if(mode=='w')		f.open(dir, ios:app);
+typedef struct cost_beer
+{
+	char name[16];
+	float won_per_cc;
+}Cost_beer;
+
+Cost_beer cost_list[14];
+
+void f_open(fstream &f, string dir, char mode){
+	if(mode=='w')		f.open(dir, ios::app);
 	else if(mode=='r')	f.open(dir, ios::in);
 	
 	if(!f){
@@ -16,8 +24,8 @@ void fopen(fstream &f, String dir, char mode){
 	}
 }
 
-
 int cnt = 0;
+
 class Customer
 {
 private:
@@ -26,15 +34,15 @@ protected:
 	time_t time_now;
 	struct tm *Time;
 	fstream f;
-	int volume;
+	int volume, menu;
 	char name[25];
-
+	
 
 public:
 	
 	void time_limit(tm *now)
 	{
-		fopen(f, "save_Data.txt", 'r');
+		f_open(f, "save_Data.txt", 'r');
 		int hour, min, sec;
 		int tmp;
 		char tmpname[16];
@@ -58,7 +66,7 @@ public:
 
 	void record_time()
 	{
-		fopen(f, "save_Data.txt", "w");
+		f_open(f, "save_Data.txt", 'w');
 		time_now = time(NULL);
 		Time = localtime(&time_now);
 		f << Time->tm_hour << " " << Time->tm_min << " " << Time->tm_sec << '\n';
@@ -69,54 +77,42 @@ public:
 	}
 	void record_beer()
 	{
-		fopen(f, "save_Data.txt", "w");
-		cout << "Selected Beer: ";
-		cin >> name;
+		f_open(f, "save_Data.txt", 'w');
+		cout << "Select Beer: ";
+		cin >> menu;
+		menu--;
 		cout << "Volume: ";
 		cin >> volume;
-		f << name << " " << volume << " ";
+		f << cost_list[menu].name << " " << volume << " ";
 		cnt++;
 		f.close();
 	}
-
 };
 
 class Cashier :private Customer
 {
 private:
-	typedef struct cost_beer
-	{
-		char name[16];
-		float won_per_cc;
-	}Cost_beer;
-
-	Cost_beer cost_list[14];
 
 	int total_cost;
 
 	void calculate_payment()
 	{
-		int i;
-		int j;
-		int cost;
+		int i, j, cost;
 		string tmp;
 		for (i = 0; i < cnt; i++)
 		{
-			f.open("save_Data.txt", ios::in);
+			f_open(f, "save_Data.txt", 'r');
 			f >> name >> volume;
 			getline(f, tmp);
 			f.close();
+
 			for (j = 0; j < 14; j++)
 			{
-				if (strcmp(cost_list[j].name, name) == 0) //cost_list�� name�� �̻��ѹ��ڷ� �Ǿ����� �̰͸� �ذ��ϸ� ���ư��Ͱ���
+				if (strcmp(cost_list[j].name, name) == 0)
 				{
-					cost = cost_list[j].won_per_cc*volume;
-					f.open("final_bill.txt", ios::out);
-					if (!f)
-					{
-						cout << "Input file opening failed";
-						exit(1);
-					}
+					cost = (int)round(cost_list[j].won_per_cc*volume);
+					
+					f_open(f, "final_bill.txt", 'w');
 					f << name << cost;
 					total_cost += cost;
 					f.close();
@@ -129,45 +125,53 @@ public:
 	Cashier() {
 		total_cost = 0;
 	}
-	void open_cost_list()
+	void load_cost_list()
 	{
 		char name[16];
-		float c;
+		float cost;
 		int i;
-		f.open("cost_list.txt", ios::app);
-		if (!f)
-		{
-			cout << "Input file opening failed"; //�� ���� �ȿ����� �������� �����
-			exit(1);
-		}
+
+		f_open(f, "cost_list.txt", 'r');
 		for (i = 0; i < 14; i++)
 		{
-			f >> name >> c;
+			f >> name >> cost;
 			strcpy(cost_list[i].name, name);
-			cost_list[i].won_per_cc = c;
+			cost_list[i].won_per_cc = cost;
 		}
 		f.close();
 	}
 
-	void show_data()
+	void show_cost_list() {
+		cout << "welcome to sejong beer pub!" << endl;
+		cout << "num\tmenu\t\tprice" << endl;
+		for (int i = 0; i < 14; i++) {
+			cout << i+1 << "\t";			
+			cout.flags(ios::left);
+			cout.width(16);
+			cout << cost_list[i].name;
+			cout.width(2);
+			cout << cost_list[i].won_per_cc << endl;
+		}
+	}
+
+	void show_save_data()
 	{
+		f_open(f, "save_Data.txt", 'r');
+
 		string line;
-		openfile_to_read();
 		while (!f.eof())
 		{
 			getline(f, line);
 			cout << line << endl;
 			cnt++;
 		}
+
+		f.close();
 	}
 	void show_payment()
 	{
 		calculate_payment();
-		f.open("final_bill.txt", ios::in);
-		if (f.eof()) {
-			cout << "Input file opening failed";
-			exit(1);
-		}
+		f_open(f, "final_bill.txt", 'r');
 		while (!f.eof())
 		{
 			char name[16];
@@ -176,25 +180,31 @@ public:
 			cout << name << ": " << cost << endl;
 		}
 		cout << "Total Sum: " << total_cost << endl;
+		f.close();
 	}
 
 };
 
-
 int main()
 {
-	Customer c;
-	Cashier ch;
-	c.record_beer();
-	c.record_time();
-	int a, b, q;
+	int hour, min, sec;
 	char name[25];
 	int volume;
 	ifstream f("save_Data.txt");
-	f >> name >> volume >> a >> b >> q;
-	cout << name << volume << a << b << q << endl;
-	ch.show_payment();
-	ch.open_cost_list();
-	ch.show_data();
+
+	Customer customer;
+	Cashier cashier;
+
+	cashier.load_cost_list();
+	cashier.show_cost_list();
+
+	customer.record_beer();
+	customer.record_time();
+	
+	f >> name >> volume >> hour >> min >> sec;
+	cout << name << volume << hour << min << sec << endl;
+
+	cashier.show_payment();
+	cashier.show_save_data();
 	return 0;
 }
