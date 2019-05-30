@@ -5,6 +5,18 @@
 #include <string>
 
 using namespace std;
+
+void fopen(fstream &f, String dir, char mode){
+	if(mode=='w')		f.open(dir, ios:app);
+	else if(mode=='r')	f.open(dir, ios::in);
+	
+	if(!f){
+		cout << "Failed to load file" << endl;
+		exit(1);
+	}
+}
+
+
 int cnt = 0;
 class Customer
 {
@@ -19,63 +31,52 @@ protected:
 
 
 public:
-
-	void openfile_to_write()
-	{
-		f.open("save_Data.txt", ios::app);
-		if (!f)
-		{
-			cout << "Input file opening failed";
-			exit(1);
-		}
-	}
-	void openfile_to_read()
-	{
-		f.open("save_Data.txt", ios::in);
-		if (!f)
-		{
-			cout << "File does not open!!";
-			exit(1);
-		}
-	}
+	
 	void time_limit(tm *now)
 	{
-		int hr1, min1, sec1;
+		fopen(f, "save_Data.txt", 'r');
+		int hour, min, sec;
 		int tmp;
 		char tmpname[16];
-		f >> tmpname >> tmp >> hr1 >> min1 >> sec1;
-		cout << hr1 << endl;
-		tmp = now->tm_sec - sec1;
-		sec1 = tmp < 0 ? (tmp + 60) && (now->tm_min = now->tm_min - 1) : tmp;
-		tmp = now->tm_min - min1;
-		min1 = tmp < 0 ? (tmp + 60) && (now->tm_hour = now->tm_hour - 1) : tmp;
-		hr1 = now->tm_hour - hr1;
-		cout << hr1 << endl;
-		if (hr1 >= 2)
+		f >> tmpname>>tmp>>hour >> min >> sec;
+		f.close();
+
+		cout << hour << endl;
+		tmp = now->tm_sec - sec;
+		sec = tmp < 0 ? (tmp + 60) && (now->tm_min = now->tm_min - 1) : tmp;
+		tmp = now->tm_min - min;
+		min = tmp < 0 ? (tmp + 60) && (now->tm_hour = now->tm_hour - 1) : tmp;
+		hour = now->tm_hour - hour;
+		cout << hour << endl;
+
+		if (hour >= 2)
 		{
 			printf("Time is Over!!");
 		}
 
 	}
+
 	void record_time()
 	{
+		fopen(f, "save_Data.txt", "w");
 		time_now = time(NULL);
 		Time = localtime(&time_now);
 		f << Time->tm_hour << " " << Time->tm_min << " " << Time->tm_sec << '\n';
 		cout << Time->tm_hour << " " << Time->tm_min << " " << Time->tm_sec << '\n';
 		f.close();
-		openfile_to_read();
+
 		time_limit(Time);
-		f.close();
 	}
 	void record_beer()
 	{
+		fopen(f, "save_Data.txt", "w");
 		cout << "Selected Beer: ";
 		cin >> name;
 		cout << "Volume: ";
 		cin >> volume;
 		f << name << " " << volume << " ";
 		cnt++;
+		f.close();
 	}
 
 };
@@ -107,7 +108,7 @@ private:
 			f.close();
 			for (j = 0; j < 14; j++)
 			{
-				if (strcmp(cost_list[j].name, name) == 0) //cost_list¿¡ nameÀÌ ÀÌ»óÇÑ¹®ÀÚ·Î µÇ¾îÀÖÀ½ ÀÌ°Í¸¸ ÇØ°áÇÏ¸é µ¹¾Æ°¥°Í°°À½
+				if (strcmp(cost_list[j].name, name) == 0) //cost_listï¿½ï¿½ nameï¿½ï¿½ ï¿½Ì»ï¿½ï¿½Ñ¹ï¿½ï¿½Ú·ï¿½ ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì°Í¸ï¿½ ï¿½Ø°ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½Æ°ï¿½ï¿½Í°ï¿½ï¿½ï¿½
 				{
 					cost = cost_list[j].won_per_cc*volume;
 					f.open("final_bill.txt", ios::out);
@@ -136,7 +137,7 @@ public:
 		f.open("cost_list.txt", ios::app);
 		if (!f)
 		{
-			cout << "Input file opening failed"; //ÀÌ ÆÄÀÏ ¾È¿­·Á¼­ ¸¶Áö¸·¿¡ ½ÇÇàµÊ
+			cout << "Input file opening failed"; //ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½È¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
 			exit(1);
 		}
 		for (i = 0; i < 14; i++)
@@ -184,7 +185,6 @@ int main()
 {
 	Customer c;
 	Cashier ch;
-	c.openfile_to_write();
 	c.record_beer();
 	c.record_time();
 	int a, b, q;
