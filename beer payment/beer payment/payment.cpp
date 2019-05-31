@@ -14,11 +14,11 @@ typedef struct cost_beer
 
 Cost_beer cost_list[14];
 
-void f_open(fstream &f, string dir, char mode){
-	if(mode=='w')		f.open(dir, ios::app);
-	else if(mode=='r')	f.open(dir, ios::in);
-	
-	if(!f){
+void f_open(fstream &f, string dir, char mode) {
+	if (mode == 'w')		f.open(dir, ios::app);
+	else if (mode == 'r')	f.open(dir, ios::in);
+
+	if (!f) {
 		cout << "Failed to load file" << endl;
 		exit(1);
 	}
@@ -36,26 +36,24 @@ protected:
 	fstream f;
 	int volume, menu;
 	char name[25];
-	
+
 
 public:
-	
+
 	void time_limit(tm *now)
 	{
 		f_open(f, "save_Data.txt", 'r');
 		int hour, min, sec;
 		int tmp;
 		char tmpname[16];
-		f >> tmpname>>tmp>>hour >> min >> sec;
+		f >> tmpname >> tmp >> hour >> min >> sec;
 		f.close();
 
-		cout << hour << endl;
 		tmp = now->tm_sec - sec;
 		sec = tmp < 0 ? (tmp + 60) && (now->tm_min = now->tm_min - 1) : tmp;
 		tmp = now->tm_min - min;
 		min = tmp < 0 ? (tmp + 60) && (now->tm_hour = now->tm_hour - 1) : tmp;
 		hour = now->tm_hour - hour;
-		cout << hour << endl;
 
 		if (hour >= 2)
 		{
@@ -110,10 +108,13 @@ private:
 			{
 				if (strcmp(cost_list[j].name, name) == 0)
 				{
-					cost = (int)round(cost_list[j].won_per_cc*volume);
-					
+					cost = (cost_list[j].won_per_cc*volume);
+
 					f_open(f, "final_bill.txt", 'w');
-					f << name << cost;
+					f << name << " " << cost;
+					f.close();
+					f_open(f, "total_cost.txt", 'r');
+					f >> total_cost;
 					total_cost += cost;
 					f.close();
 				}
@@ -145,7 +146,7 @@ public:
 		cout << "welcome to sejong beer pub!" << endl;
 		cout << "num\tmenu\t\tprice" << endl;
 		for (int i = 0; i < 14; i++) {
-			cout << i+1 << "\t";			
+			cout << i + 1 << "\t";
 			cout.flags(ios::left);
 			cout.width(16);
 			cout << cost_list[i].name;
@@ -177,12 +178,17 @@ public:
 			char name[16];
 			int cost;
 			f >> name >> cost;
-			cout << name << ": " << cost << endl;
+			cout << name << ":" << cost << endl;
 		}
+		f.close();
+		f_open(f, "total_cost.txt", 'w');
+		f << total_cost;
 		cout << "Total Sum: " << total_cost << endl;
 		f.close();
+		f_open(f, "total_cost.txt", 'r');
+		f >> total_cost;
+		f.close();
 	}
-
 };
 
 int main()
@@ -200,11 +206,11 @@ int main()
 
 	customer.record_beer();
 	customer.record_time();
-	
+
 	f >> name >> volume >> hour >> min >> sec;
-	cout << name << volume << hour << min << sec << endl;
 
 	cashier.show_payment();
 	cashier.show_save_data();
+
 	return 0;
 }
