@@ -14,6 +14,8 @@ typedef struct cost_beer
 
 Cost_beer cost_list[14];
 
+
+
 void f_open(fstream &f, string dir, char mode) {
 	if (mode == 'w')		f.open(dir, ios::app);
 	else if (mode == 'r')	f.open(dir, ios::in);
@@ -24,7 +26,7 @@ void f_open(fstream &f, string dir, char mode) {
 	}
 }
 
-int cnt = 0;
+int cnt = 0;	//number of order
 
 class Customer
 {
@@ -68,10 +70,11 @@ public:
 		time_now = time(NULL);
 		Time = localtime(&time_now);
 		f << Time->tm_hour << " " << Time->tm_min << " " << Time->tm_sec << '\n';
-		cout << Time->tm_hour << " " << Time->tm_min << " " << Time->tm_sec << '\n';
 		f.close();
 
 		time_limit(Time);
+
+		
 	}
 	void record_beer()
 	{
@@ -82,51 +85,101 @@ public:
 		cout << "Volume: ";
 		cin >> volume;
 		f << cost_list[menu].name << " " << volume << " ";
-		cnt++;
+
 		f.close();
+
 	}
 };
 
 class Cashier :private Customer
 {
+
+
 private:
 
+	
 	int total_cost;
-
+	int num = 0;
 	void calculate_payment()
 	{
 		int i, j, cost;
+		
+		char name_tmp[14];
 		string tmp;
+		Cost_beer *calculated_list = new Cost_beer[cnt];
+		Cost_beer remove_overlap[14];
+		f_open(f, "save_Data.txt", 'r');
 		for (i = 0; i < cnt; i++)
 		{
-			f_open(f, "save_Data.txt", 'r');
 			f >> name >> volume;
 			getline(f, tmp);
-			f.close();
-
 			for (j = 0; j < 14; j++)
 			{
 				if (strcmp(cost_list[j].name, name) == 0)
 				{
 					cost = (cost_list[j].won_per_cc*volume);
-
-					f_open(f, "final_bill.txt", 'w');
-					f << name << " " << cost;
-					f.close();
-					f_open(f, "total_cost.txt", 'r');
-					f >> total_cost;
+					strcpy(calculated_list[i].name, name);
+					calculated_list[i].won_per_cc = cost;
 					total_cost += cost;
-					f.close();
+					
+				}
+			}
+			
+		}
+		f.close();
+		remove_overlap[num].won_per_cc = calculated_list[0].won_per_cc;			//중복 제거
+		strcpy(remove_overlap[num].name, calculated_list[0].name);
+		for (i = 1;i < cnt;i++)
+		{
+			for (j = 0;j <= num;j++)
+			{
+				if (strcmp(calculated_list[i].name, remove_overlap[j].name) == 0)
+				{
+					remove_overlap[j].won_per_cc += calculated_list[i].won_per_cc;
+					break;
+				}
+				else
+					continue;
+
+			}
+			if (j == num + 1)
+			{
+				strcpy(remove_overlap[j].name,calculated_list[i].name);
+				remove_overlap[j].won_per_cc = calculated_list[i].won_per_cc;
+				num++;
+			}
+		}
+		for (i = 0;i <= num;i++)						//사전순
+		{
+			for (j = 0;j <= num;j++)
+			{
+				if (strcmp(remove_overlap[j].name, remove_overlap[j + 1].name) > 0)
+				{
+					strcpy(name_tmp, remove_overlap[j].name);
+					strcpy(remove_overlap[j].name, remove_overlap[j + 1].name);
+					strcpy(remove_overlap[j + 1].name, name_tmp);
+
 				}
 			}
 		}
+
+		f_open(f, "final_bill.txt", 'w');			//저장
+
+		for (i = 0;i <= num;i++)
+		{
+			
+			f << remove_overlap[i].name <<" " <<remove_overlap[i].won_per_cc<<"\n";
+			
+		}
+		free(calculated_list);
+		f.close();
 	}
 
 public:
 	Cashier() {
 		total_cost = 0;
 	}
-	void load_cost_list()
+	void load_cost_list(Cost_beer tmp[])
 	{
 		char name[16];
 		float cost;
@@ -136,22 +189,22 @@ public:
 		for (i = 0; i < 14; i++)
 		{
 			f >> name >> cost;
-			strcpy(cost_list[i].name, name);
-			cost_list[i].won_per_cc = cost;
+			strcpy(tmp[i].name, name);
+			tmp[i].won_per_cc = cost;
 		}
 		f.close();
 	}
 
-	void show_cost_list() {
+	void show_cost_list(Cost_beer tmp[]) {
 		cout << "welcome to sejong beer pub!" << endl;
 		cout << "num\tmenu\t\tprice" << endl;
 		for (int i = 0; i < 14; i++) {
 			cout << i + 1 << "\t";
 			cout.flags(ios::left);
 			cout.width(16);
-			cout << cost_list[i].name;
+			cout << tmp[i].name;
 			cout.width(2);
-			cout << cost_list[i].won_per_cc << endl;
+			cout << tmp[i].won_per_cc << endl;
 		}
 	}
 
@@ -166,14 +219,17 @@ public:
 			cout << line << endl;
 			cnt++;
 		}
-
+		cnt--;
 		f.close();
 	}
 	void show_payment()
+		
 	{
+		
 		calculate_payment();
 		f_open(f, "final_bill.txt", 'r');
-		while (!f.eof())
+		cout << "---------Final Bill List-------" << endl;
+		for(int i=0;i<=num;i++)
 		{
 			char name[16];
 			int cost;
@@ -181,13 +237,9 @@ public:
 			cout << name << ":" << cost << endl;
 		}
 		f.close();
-		f_open(f, "total_cost.txt", 'w');
-		f << total_cost;
 		cout << "Total Sum: " << total_cost << endl;
-		f.close();
-		f_open(f, "total_cost.txt", 'r');
-		f >> total_cost;
-		f.close();
+		
+		
 	}
 };
 
@@ -196,21 +248,22 @@ int main()
 	int hour, min, sec;
 	char name[25];
 	int volume;
-	ifstream f("save_Data.txt");
+	ifstream f;
 
 	Customer customer;
 	Cashier cashier;
 
-	cashier.load_cost_list();
-	cashier.show_cost_list();
+	cashier.load_cost_list(cost_list);
+	cashier.show_cost_list(cost_list);
 
 	customer.record_beer();
 	customer.record_time();
 
-	f >> name >> volume >> hour >> min >> sec;
+	
 
-	cashier.show_payment();
 	cashier.show_save_data();
+	cashier.show_payment();
+
 
 	return 0;
 }

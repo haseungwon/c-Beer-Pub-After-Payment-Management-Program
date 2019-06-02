@@ -1,1 +1,16 @@
-Hoegarrden 500 11 55 57
+Asahi 1 21 8 18
+Asahi 1 21 10 19
+Asahi 2 21 10 31
+Asahi 2 21 10 41
+Asahi 1 21 10 45
+Cass 3 21 11 14
+Dunkel 1 21 12 13
+Edelweiss 100 21 13 17
+Asahi 1 21 16 37
+Asahi 1 21 17 24
+Asahi 1 21 18 0
+Dunkel 3 21 19 14
+Cass 2 21 19 46
+Edelweiss 4 21 19 56
+Asahi 1 21 22 27
+Asahi 100 21 23 22
