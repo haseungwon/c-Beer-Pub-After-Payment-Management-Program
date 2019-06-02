@@ -74,7 +74,7 @@ public:
 
 		time_limit(Time);
 
-		
+
 	}
 	void record_beer()
 	{
@@ -97,13 +97,13 @@ class Cashier :private Customer
 
 private:
 
-	
+
 	int total_cost;
-	int num = 0;
+	int num;
 	void calculate_payment()
 	{
 		int i, j, cost;
-		
+
 		char name_tmp[14];
 		string tmp;
 		Cost_beer *calculated_list = new Cost_beer[cnt];
@@ -121,17 +121,17 @@ private:
 					strcpy(calculated_list[i].name, name);
 					calculated_list[i].won_per_cc = cost;
 					total_cost += cost;
-					
+
 				}
 			}
-			
+
 		}
 		f.close();
 		remove_overlap[num].won_per_cc = calculated_list[0].won_per_cc;			//중복 제거
 		strcpy(remove_overlap[num].name, calculated_list[0].name);
-		for (i = 1;i < cnt;i++)
+		for (i = 1; i < cnt; i++)
 		{
-			for (j = 0;j <= num;j++)
+			for (j = 0; j <= num; j++)
 			{
 				if (strcmp(calculated_list[i].name, remove_overlap[j].name) == 0)
 				{
@@ -144,14 +144,14 @@ private:
 			}
 			if (j == num + 1)
 			{
-				strcpy(remove_overlap[j].name,calculated_list[i].name);
+				strcpy(remove_overlap[j].name, calculated_list[i].name);
 				remove_overlap[j].won_per_cc = calculated_list[i].won_per_cc;
 				num++;
 			}
 		}
-		for (i = 0;i <= num;i++)						//사전순
+		for (i = 0; i <= num; i++)						//사전순
 		{
-			for (j = 0;j <= num;j++)
+			for (j = 0; j <= num; j++)
 			{
 				if (strcmp(remove_overlap[j].name, remove_overlap[j + 1].name) > 0)
 				{
@@ -165,11 +165,11 @@ private:
 
 		f_open(f, "final_bill.txt", 'w');			//저장
 
-		for (i = 0;i <= num;i++)
+		for (i = 0; i <= num; i++)
 		{
-			
-			f << remove_overlap[i].name <<" " <<remove_overlap[i].won_per_cc<<"\n";
-			
+
+			f << remove_overlap[i].name << " " << remove_overlap[i].won_per_cc << "\n";
+
 		}
 		free(calculated_list);
 		f.close();
@@ -178,6 +178,7 @@ private:
 public:
 	Cashier() {
 		total_cost = 0;
+		num = 0;
 	}
 	void load_cost_list(Cost_beer tmp[])
 	{
@@ -223,13 +224,13 @@ public:
 		f.close();
 	}
 	void show_payment()
-		
+
 	{
-		
+
 		calculate_payment();
 		f_open(f, "final_bill.txt", 'r');
 		cout << "---------Final Bill List-------" << endl;
-		for(int i=0;i<=num;i++)
+		for (int i = 0; i <= num; i++)
 		{
 			char name[16];
 			int cost;
@@ -238,8 +239,8 @@ public:
 		}
 		f.close();
 		cout << "Total Sum: " << total_cost << endl;
-		
-		
+
+
 	}
 };
 
@@ -259,7 +260,7 @@ int main()
 	customer.record_beer();
 	customer.record_time();
 
-	
+
 
 	cashier.show_save_data();
 	cashier.show_payment();
