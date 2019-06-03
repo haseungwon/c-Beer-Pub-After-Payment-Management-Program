@@ -61,8 +61,12 @@ public:
 		min = tmp < 0 ? (tmp + 60) && (now->tm_hour = now->tm_hour - 1) : tmp;
 		hour = now->tm_hour - hour;
 
-		if (hour >= 2)
+		/*if (hour >= 2)
 		{
+			printf("Time is Over!!");
+			Countinue = 0;
+		}*/
+		if (hour == 0 && min >= 1) {	//for demonstration
 			printf("Time is Over!!");
 			Countinue = 0;
 		}
@@ -92,7 +96,7 @@ public:
 		f << cost_list[menu].name << " " << volume << " ";
 
 		f.close();
-
+		
 	}
 };
 
@@ -247,7 +251,7 @@ public:
 
 
 	}
-	void get_payment()
+	void get_payment() 
 	{
 		int get;
 
@@ -276,9 +280,6 @@ public:
 
 int main()
 {
-	int hour, min, sec;
-	char name[25];
-	int volume;
 	ifstream f;
 
 	Customer customer;
