@@ -66,8 +66,9 @@ public:
 			printf("Time is Over!!");
 			Countinue = 0;
 		}*/
-		if (hour == 0 && min >= 1) {	//for demonstration
-			printf("Time is Over!!");
+		if (hour == 0 && min ==0&& sec>=30) {	//for demonstration
+			printf("Time is Over!!\n\n\n\n\n\n\n\n\n");
+			
 			Countinue = 0;
 		}
 
@@ -221,7 +222,7 @@ public:
 	void show_save_data()
 	{
 		f_open(f, "save_Data.txt", 'r');
-
+		cout << "Your list: " << endl;
 		string line;
 		while (!f.eof())
 		{
@@ -263,15 +264,20 @@ public:
 			if (get < total_cost)
 			{
 				cout << total_cost - get << "won more needs to be paid" << endl;
+				total_cost = total_cost - get;
 			}
 			else if (get > total_cost)
 			{
 				cout << get - total_cost << "won is returned" << endl;
+				cout << "Payment is over" << endl;
+				cout << "Have a nice day" << endl;
+				break;
 			}
 			else
 			{
 				cout << "Payment is over" << endl;
 				cout << "Have a nice day" << endl;
+				break;
 			}
 
 		}
@@ -295,7 +301,7 @@ int main()
 	}
 	cashier.show_save_data();
 	cashier.show_payment();
-	cashier.show_payment();
+	cashier.get_payment();
 
 	return 0;
 }
