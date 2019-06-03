@@ -38,10 +38,11 @@ protected:
 	fstream f;
 	int volume, menu;
 	char name[25];
+	
 
 
 public:
-
+	int Countinue = 1;
 	void time_limit(tm *now)
 	{
 		f_open(f, "save_Data.txt", 'r');
@@ -60,6 +61,7 @@ public:
 		if (hour >= 2)
 		{
 			printf("Time is Over!!");
+			Countinue = 0;
 		}
 
 	}
@@ -254,14 +256,14 @@ int main()
 	Customer customer;
 	Cashier cashier;
 
-	cashier.load_cost_list(cost_list);
-	cashier.show_cost_list(cost_list);
+	while (customer.Countinue)
+	{
+		cashier.load_cost_list(cost_list);
+		cashier.show_cost_list(cost_list);
 
-	customer.record_beer();
-	customer.record_time();
-
-
-
+		customer.record_beer();
+		customer.record_time();
+	}
 	cashier.show_save_data();
 	cashier.show_payment();
 
