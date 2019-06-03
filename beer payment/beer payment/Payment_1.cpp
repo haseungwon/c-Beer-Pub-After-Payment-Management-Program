@@ -1,4 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
+#pragma warning(disable:4244)
 #include <iostream>
 #include <ctime>
 #include <fstream>
@@ -15,7 +16,6 @@ typedef struct cost_beer
 Cost_beer cost_list[14];
 
 
-
 void f_open(fstream &f, string dir, char mode) {
 	if (mode == 'w')		f.open(dir, ios::app);
 	else if (mode == 'r')	f.open(dir, ios::in);
@@ -24,6 +24,14 @@ void f_open(fstream &f, string dir, char mode) {
 		cout << "Failed to load file" << endl;
 		exit(1);
 	}
+}
+
+void init_file() {
+	fstream f;
+	f.open("save_Data.txt", fstream::out | fstream::trunc);
+	f.close();
+	f.open("final_bill.txt", fstream::out | fstream::trunc);
+	f.close();
 }
 
 int cnt = 0;	//number of order
@@ -67,7 +75,8 @@ public:
 			Countinue = 0;
 		}*/
 		if (hour == 0 && min ==0&& sec>=30) {	//for demonstration
-			printf("Time is Over!!\n\n\n\n\n\n\n\n\n");
+//			printf("Time is Over!!\n\n\n\n\n\n\n\n\n");
+			cout << "Time is Over!!\n\n\n\n\n\n\n\n\n";
 			
 			Countinue = 0;
 		}
@@ -177,9 +186,7 @@ private:
 
 		for (i = 0; i <= num; i++)
 		{
-
 			f << remove_overlap[i].name << " " << remove_overlap[i].won_per_cc << "\n";
-
 		}
 		free(calculated_list);
 		f.close();
@@ -286,7 +293,8 @@ public:
 
 int main()
 {
-	ifstream f;
+	init_file();
+//	ifstream f;
 
 	Customer customer;
 	Cashier cashier;

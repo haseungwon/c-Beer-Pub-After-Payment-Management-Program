@@ -1,5 +1,2 @@
-Asahi 5868
-Cass 2400
-Edelweiss 1760
-Hoegarrden 3520
-Magners 1936
+Dunkel 910
+Heineken 1820
