@@ -38,11 +38,14 @@ protected:
 	fstream f;
 	int volume, menu;
 	char name[25];
-	
+
 
 
 public:
-	int Countinue = 1;
+	int Countinue;
+	Customer() {
+		Countinue = 1;
+	}
 	void time_limit(tm *now)
 	{
 		f_open(f, "save_Data.txt", 'r');
@@ -219,7 +222,7 @@ public:
 		while (!f.eof())
 		{
 			getline(f, line);
-			cout << line <<endl;
+			cout << line << endl;
 			cnt++;
 		}
 		cnt--;
@@ -240,19 +243,19 @@ public:
 			cout << name << ":" << cost << endl;
 		}
 		f.close();
-		cout << "Total Sum: " << total_cost<<"won" << endl;
+		cout << "Total Sum: " << total_cost << "won" << endl;
 
 
 	}
 	void get_payment()
 	{
 		int get;
-		
+
 		while (1)
 		{
 			cin >> get;
 			cout << "won received" << endl;
-			
+
 			if (get < total_cost)
 			{
 				cout << total_cost - get << "won more needs to be paid" << endl;
@@ -266,7 +269,7 @@ public:
 				cout << "Payment is over" << endl;
 				cout << "Have a nice day" << endl;
 			}
-				
+
 		}
 	}
 };
