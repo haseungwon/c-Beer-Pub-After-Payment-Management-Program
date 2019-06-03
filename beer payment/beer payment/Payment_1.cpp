@@ -219,7 +219,7 @@ public:
 		while (!f.eof())
 		{
 			getline(f, line);
-			cout << line << endl;
+			cout << line <<endl;
 			cnt++;
 		}
 		cnt--;
@@ -240,9 +240,34 @@ public:
 			cout << name << ":" << cost << endl;
 		}
 		f.close();
-		cout << "Total Sum: " << total_cost << endl;
+		cout << "Total Sum: " << total_cost<<"won" << endl;
 
 
+	}
+	void get_payment()
+	{
+		int get;
+		
+		while (1)
+		{
+			cin >> get;
+			cout << "won received" << endl;
+			
+			if (get < total_cost)
+			{
+				cout << total_cost - get << "won more needs to be paid" << endl;
+			}
+			else if (get > total_cost)
+			{
+				cout << get - total_cost << "won is returned" << endl;
+			}
+			else
+			{
+				cout << "Payment is over" << endl;
+				cout << "Have a nice day" << endl;
+			}
+				
+		}
 	}
 };
 
@@ -266,7 +291,7 @@ int main()
 	}
 	cashier.show_save_data();
 	cashier.show_payment();
-
+	cashier.show_payment();
 
 	return 0;
 }
