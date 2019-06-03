@@ -61,16 +61,16 @@ public:
 		min = tmp < 0 ? (tmp + 60) && (now->tm_hour = now->tm_hour - 1) : tmp;
 		hour = now->tm_hour - hour;
 
-		/*if (hour >= 2)
+		if (hour >= 2)
 		{
 			printf("Time is Over!!");
 			Countinue = 0;
-		}*/
-		if (hour == 0 && min ==0&& sec>=30) {	//for demonstration
+		}
+		/*if (hour == 0 && min >= 1) {	//for demonstration
 			printf("Time is Over!!\n\n\n\n\n\n\n\n\n");
 			
 			Countinue = 0;
-		}
+		}*/
 
 	}
 
